@@ -29,8 +29,8 @@ const RecordPage = async () => {
   return (
     <div className="conatiner m-auto">
       <div className="flex flex-col h-screen items-center justify-center">
-        <p>RecordPage</p>
-        <button onClick={handleClick} className="my-10 p-2 bg-black text-white">
+        <p className="font-bold text-9xl mb-10">/record</p>
+        <button onClick={handleClick} className="my-10 p-2 bg-red-300">
           INSERT user
         </button>
         <Link href="/">Go back</Link>
