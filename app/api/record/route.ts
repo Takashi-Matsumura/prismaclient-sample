@@ -12,5 +12,7 @@ export const POST = async (req: Request, res: NextResponse) => {
       email,
     },
   });
+  console.log("Server API:");
+  console.log(new_user);
   return NextResponse.json(new_user);
 };
