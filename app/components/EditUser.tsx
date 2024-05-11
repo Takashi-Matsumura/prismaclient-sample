@@ -56,7 +56,7 @@ const EditUser = () => {
   };
 
   return (
-    <div className="flex flex-col space-y-5 w-1/2 p-10 items-center">
+    <div className="flex flex-col space-y-10 w-1/2 p-10 items-center">
       <form className="border-2 w-2/3 p-5">
         <p className="text-center font-bold">Form (EditUser.tsx)</p>
         <div className="mb-4">
@@ -119,8 +119,11 @@ const EditUser = () => {
       {isFetching ? (
         <p className="text-center">Fetching...</p>
       ) : (
-        <div className="border-2 w-full items-center justify-center p-5 overflow-auto whitespace-normal">
-          {JSON.stringify({ name, email })}
+        <div className="flex flex-col w-full">
+          <p className="font-bold">REST-API Payload:</p>
+          <div className="border-2 items-center justify-center p-5 overflow-auto whitespace-normal">
+            {JSON.stringify({ name, email })}
+          </div>
         </div>
       )}
     </div>
