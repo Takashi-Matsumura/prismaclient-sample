@@ -8,16 +8,21 @@ const NewUser = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
   const handleSubmit = async () => {
-    const response = await fetch("/api/user", {
-      method: "POST",
-      body: JSON.stringify({ name, email }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
+    setIsFetching(true);
+    {
+      const response = await fetch("/api/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email }),
+      });
+      const data = await response.json();
+    }
+    setIsFetching(false);
 
     router.push("/");
     router.refresh();
@@ -55,13 +60,17 @@ const NewUser = () => {
             className="border-2 p-2"
           />
         </div>
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="bg-blue-500 text-white px-2 py-1"
-        >
-          Submit
-        </button>
+        {isFetching ? (
+          <p className="text-center">Creating...</p>
+        ) : (
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="bg-blue-500 text-white px-2 py-1"
+          >
+            Submit
+          </button>
+        )}
       </form>
 
       <div className="border-2 w-full items-center justify-center p-5 overflow-auto whitespace-normal">

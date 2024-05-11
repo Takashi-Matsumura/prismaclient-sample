@@ -14,12 +14,12 @@ const EditUser = () => {
   useEffect(() => {
     const fetchUser = async () => {
       setIsFetching(true);
-
-      const res = await fetch(`/api/user/${parseInt(id)}`);
-      const user = await res.json();
-      setName(user.name);
-      setEmail(user.email);
-
+      {
+        const res = await fetch(`/api/user/${parseInt(id)}`);
+        const user = await res.json();
+        setName(user.name);
+        setEmail(user.email);
+      }
       setIsFetching(false);
     };
     fetchUser();
@@ -28,12 +28,26 @@ const EditUser = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsFetching(true);
+    {
+      const res = await fetch(`/api/user/${parseInt(id)}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, name, email }),
+      });
+      const user = await res.json();
+    }
+    setIsFetching(false);
+
+    router.push("/");
+    router.refresh();
+  };
+
+  const handleDelete = async () => {
     const res = await fetch(`/api/user/${parseInt(id)}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, name, email }),
+      method: "DELETE",
     });
     const user = await res.json();
 
@@ -45,6 +59,11 @@ const EditUser = () => {
     <div className="flex flex-col space-y-5 w-1/2 p-10 items-center">
       <form className="border-2 w-2/3 p-5">
         <p className="text-center font-bold">Form (EditUser.tsx)</p>
+        <div className="mb-4">
+          <label htmlFor="id" className="mb-2">
+            ID: #{id}
+          </label>
+        </div>
         <div className="flex flex-col mb-4">
           <label htmlFor="name" className="mb-2">
             Name
@@ -75,13 +94,26 @@ const EditUser = () => {
             className="border-2 p-2"
           />
         </div>
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="bg-blue-500 text-white px-2 py-1"
-        >
-          Submit
-        </button>
+        <div className="flex items-center justify-between">
+          {isFetching ? (
+            <p>Updating...</p>
+          ) : (
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="bg-blue-500 text-white px-2 py-1"
+            >
+              Submit
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="bg-red-500 text-white px-2 py-1"
+          >
+            Delete
+          </button>
+        </div>
       </form>
 
       {isFetching ? (
