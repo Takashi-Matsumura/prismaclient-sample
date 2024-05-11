@@ -12,7 +12,10 @@ export const POST = async (req: Request, res: NextResponse) => {
       email,
     },
   });
-  console.log("Server API:");
-  console.log(new_user);
   return NextResponse.json(new_user);
+};
+
+export const GET = async (req: Request, res: NextResponse) => {
+  const users = await prisma.user.findMany();
+  return NextResponse.json(users);
 };
