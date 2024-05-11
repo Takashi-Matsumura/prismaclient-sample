@@ -56,7 +56,7 @@ const NewUser = () => {
         <button
           type="button"
           onClick={handleClick}
-          className="bg-blue-500 text-white p-2"
+          className="bg-blue-500 text-white px-2 py-1"
         >
           Submit
         </button>
