@@ -1,6 +1,7 @@
 "use client";
 
 import { UserType } from "@/app/api/user/type";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 async function getUsers(): Promise<UserType[]> {
@@ -45,9 +46,12 @@ const ViewUsers = () => {
         )}
       </div>
       {users.map((user) => (
-        <div className="flex border-2 w-full px-2 py-1">
+        <Link
+          href={`/user/edit/${user.id}`}
+          className="flex border-2 w-full px-2 py-1"
+        >
           {JSON.stringify(user)}
-        </div>
+        </Link>
       ))}
     </div>
   );

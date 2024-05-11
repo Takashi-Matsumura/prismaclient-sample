@@ -1,23 +1,41 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const NewUser = () => {
+const EditUser = () => {
+  const id = useParams<{ id: string }>().id;
   const router = useRouter();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
-  const handleSubmit = async () => {
-    const response = await fetch("/api/user", {
-      method: "POST",
-      body: JSON.stringify({ name, email }),
+  useEffect(() => {
+    const fetchUser = async () => {
+      setIsFetching(true);
+
+      const res = await fetch(`/api/user/${parseInt(id)}`);
+      const user = await res.json();
+      setName(user.name);
+      setEmail(user.email);
+
+      setIsFetching(false);
+    };
+    fetchUser();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const res = await fetch(`/api/user/${parseInt(id)}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ id, name, email }),
     });
-    const data = await response.json();
+    const user = await res.json();
 
     router.push("/");
     router.refresh();
@@ -26,7 +44,7 @@ const NewUser = () => {
   return (
     <div className="flex flex-col space-y-5 w-1/2 p-10 items-center">
       <form className="border-2 w-2/3 p-5">
-        <p className="text-center font-bold">Form (NewUser.tsx)</p>
+        <p className="text-center font-bold">Form (EditUser.tsx)</p>
         <div className="flex flex-col mb-4">
           <label htmlFor="name" className="mb-2">
             Name
@@ -38,6 +56,7 @@ const NewUser = () => {
             type="text"
             name="name"
             id="name"
+            value={name}
             className="border-2 p-2"
           />
         </div>
@@ -52,6 +71,7 @@ const NewUser = () => {
             type="email"
             name="email"
             id="email"
+            value={email}
             className="border-2 p-2"
           />
         </div>
@@ -64,11 +84,15 @@ const NewUser = () => {
         </button>
       </form>
 
-      <div className="border-2 w-full items-center justify-center p-5 overflow-auto whitespace-normal">
-        {JSON.stringify({ name, email })}
-      </div>
+      {isFetching ? (
+        <p className="text-center">Fetching...</p>
+      ) : (
+        <div className="border-2 w-full items-center justify-center p-5 overflow-auto whitespace-normal">
+          {JSON.stringify({ name, email })}
+        </div>
+      )}
     </div>
   );
 };
 
-export default NewUser;
+export default EditUser;
