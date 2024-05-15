@@ -45,6 +45,7 @@ const ViewUsers = () => {
       <div className="flex flex-col items-center justify-start">
         {users.map((user) => (
           <Link
+            key={user.id}
             href={`/user/edit/${user.id}`}
             className="flex border-2 w-full px-2 py-1"
           >
